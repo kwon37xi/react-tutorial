@@ -19,25 +19,27 @@ class Board extends React.Component {
         );
     }
 
+    renderRow(row) {
+        const cells = []
+        for (let cell = 0; cell < 3; cell++) {
+            cells.push(this.renderSquare((row * 3) + cell))
+        }
+        return (
+            <div className="board-row">
+                {cells}
+            </div>
+        )
+    }
+
     // this.state 가 바뀔 때마다 render()가 매번 호출된다.
     render() {
+        const rows = []
+        for (let row = 0; row < 3; row++) {
+            rows.push(this.renderRow(row))
+        }
         return (
             <div>
-                <div className="board-row">
-                    {this.renderSquare(0)}
-                    {this.renderSquare(1)}
-                    {this.renderSquare(2)}
-                </div>
-                <div className="board-row">
-                    {this.renderSquare(3)}
-                    {this.renderSquare(4)}
-                    {this.renderSquare(5)}
-                </div>
-                <div className="board-row">
-                    {this.renderSquare(6)}
-                    {this.renderSquare(7)}
-                    {this.renderSquare(8)}
-                </div>
+                {rows}
             </div>
         );
     }
