@@ -18,7 +18,7 @@ function Square(props) {
 class Board extends React.Component {
     renderSquare(i) {
         var isWinningSquare = this.props.winner && this.props.winner.includes(i);
-        console.log("renderSquare : " + i + ", winners : " + this.props.winner + ", isWinnigSquare : " + isWinningSquare);
+
         return (
             <Square value={this.props.squares[i]} winningSquare={isWinningSquare}
                 onClick={() => this.props.onClick(i)}
@@ -72,8 +72,8 @@ class Game extends React.Component {
         // 승자가 있거나, 이미 클릭한 곳이거나(squares[i])
         if (calculateWinner(squares) || squares[i]) {
             return;
-
         }
+
         squares[i] = this.state.xIsNext ? 'X' : 'O';
         this.setState({
             history: history.concat([{
@@ -110,6 +110,8 @@ class Game extends React.Component {
         let status;
         if (winner) {
             status = 'Winner: ' + current.squares[winner[0]];
+        } else if (this.state.stepNumber === 9) {
+            status = 'Winner: 무승부';
         } else {
             status = 'Next Player: ' + (this.state.xIsNext ? 'X' : 'O');
         }
