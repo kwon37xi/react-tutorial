@@ -3,8 +3,13 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 function Square(props) {
+    var classNames = "square";
+    if (props.winningSquare) {
+        classNames += " win"
+    }
+
     return (
-        <button className="square" onClick={props.onClick}>
+        <button className={classNames} onClick={props.onClick}>
             {props.value}
         </button>
     );
@@ -12,8 +17,10 @@ function Square(props) {
 
 class Board extends React.Component {
     renderSquare(i) {
+        var isWinningSquare = this.props.winner && this.props.winner.includes(i);
+        console.log("renderSquare : " + i + ", winners : " + this.props.winner + ", isWinnigSquare : " + isWinningSquare);
         return (
-            <Square value={this.props.squares[i]}
+            <Square value={this.props.squares[i]} winningSquare={isWinningSquare}
                 onClick={() => this.props.onClick(i)}
             />
         );
@@ -102,7 +109,7 @@ class Game extends React.Component {
 
         let status;
         if (winner) {
-            status = 'Winner: ' + winner;
+            status = 'Winner: ' + current.squares[winner[0]];
         } else {
             status = 'Next Player: ' + (this.state.xIsNext ? 'X' : 'O');
         }
@@ -112,6 +119,7 @@ class Game extends React.Component {
                 <div className="game-board">
                     <Board 
                         squares={current.squares}
+                        winner={winner}
                         onClick={(i) => this.handleClick(i)}
                     />
                 </div>
@@ -149,7 +157,8 @@ function calculateWinner(squares) {
     for (let i = 0; i < lines.length; i++) {
         const [a, b, c] = lines[i];
         if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-            return squares[a];
+            // 이부분에서 승자가 결정되므로, a, b, c 가 승자 칸임을 알 수 있음.
+            return [a, b, c];
         }
     }
     return null;
