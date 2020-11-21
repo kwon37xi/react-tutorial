@@ -100,8 +100,10 @@ class Game extends React.Component {
         // history 가 <li> 컴포넌트로 mapping 된다.
         const moves = history.map((step, move) => {
             const desc = move ? 'Go to move #' + move : 'Go to game start';
+            const selectedClass = (move === this.state.stepNumber) ? "selected" : "";
+            console.log("step : " + step + ", stepNumber : " + this.state.stepNumber);
             return (
-                <li key={move}>
+                <li key={move} className={selectedClass}>
                     <button onClick={() => this.jumpTo(move)}>{desc}</button>
                 </li>
             );
@@ -119,7 +121,7 @@ class Game extends React.Component {
         return (
             <div className="game">
                 <div className="game-board">
-                    <Board 
+                    <Board
                         squares={current.squares}
                         winner={winner}
                         onClick={(i) => this.handleClick(i)}
