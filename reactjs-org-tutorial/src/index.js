@@ -81,6 +81,7 @@ class Game extends React.Component {
             }]),
             stepNumber: history.length,
             xIsNext: !this.state.xIsNext,
+            moveOrder: 'asc',
         });
     }
 
@@ -91,6 +92,9 @@ class Game extends React.Component {
         });
     }
 
+    handleMoveOrder(type) {
+        this.setState({ moveOrder: type });
+    }
 
     render() {
         const history = this.state.history;
@@ -98,7 +102,7 @@ class Game extends React.Component {
         const winner = calculateWinner(current.squares);
 
         // history 가 <li> 컴포넌트로 mapping 된다.
-        const moves = history.map((step, move) => {
+        let moves = history.map((step, move) => {
             const desc = move ? 'Go to move #' + move : 'Go to game start';
             const selectedClass = (move === this.state.stepNumber) ? "selected" : "";
             console.log("step : " + step + ", stepNumber : " + this.state.stepNumber);
@@ -108,6 +112,10 @@ class Game extends React.Component {
                 </li>
             );
         });
+
+        if (this.state.moveOrder === 'desc') {
+            moves = moves.reverse();
+        }
 
         let status;
         if (winner) {
@@ -129,6 +137,10 @@ class Game extends React.Component {
                 </div>
                 <div className="game-info">
                     <div>{status}</div>
+                    <div>
+                        <button onClick={() => this.setState({ moveOrder: 'asc' })}>오름차순</button>
+                        <button onClick={() => this.setState({ moveOrder: 'desc' })}>내림차순</button>
+                    </div>
                     <ol>{moves}</ol>
                 </div>
             </div>
