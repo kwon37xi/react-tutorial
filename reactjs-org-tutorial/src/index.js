@@ -58,6 +58,7 @@ class Game extends React.Component {
         this.state = {
             history: [{
                 squares: Array(9).fill(null),
+                position: null,
             }],
             stepNumber: 0,
             xIsNext: true,
@@ -78,6 +79,7 @@ class Game extends React.Component {
         this.setState({
             history: history.concat([{
                 squares: squares,
+                position: i,
             }]),
             stepNumber: history.length,
             xIsNext: !this.state.xIsNext,
@@ -96,6 +98,14 @@ class Game extends React.Component {
         this.setState({ moveOrder: type });
     }
 
+    // 1 기반으로 행과 열을 출력한다.
+    positionToRowCol(position) {
+        if (position == null) {
+            return "";
+        }
+        return "row : " + (Math.floor(position / 3) + 1) + ", col : " + ((position % 3) + 1);
+    }
+
     render() {
         const history = this.state.history;
         const current = history[this.state.stepNumber];
@@ -103,9 +113,11 @@ class Game extends React.Component {
 
         // history 가 <li> 컴포넌트로 mapping 된다.
         let moves = history.map((step, move) => {
-            const desc = move ? 'Go to move #' + move : 'Go to game start';
+
+            const rowCol = this.positionToRowCol(step.position);
+
+            const desc = move ? 'Go to move #' + move  + ', position: ' + rowCol : 'Go to game start';
             const selectedClass = (move === this.state.stepNumber) ? "selected" : "";
-            console.log("step : " + step + ", stepNumber : " + this.state.stepNumber);
             return (
                 <li key={move} className={selectedClass}>
                     <button onClick={() => this.jumpTo(move)}>{desc}</button>
